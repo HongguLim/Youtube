@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React from "react";
+import FakeYoutube from "../api/youtube";
 
 export default function Search() {
   const router = useRouter();
@@ -12,7 +12,8 @@ export default function Search() {
     error,
     data: videos,
   } = useQuery(["videos", keyword], async () => {
-    return axios.get("/videos/search.json").then((res) => res.data.items);
+    const youtube = new FakeYoutube();
+    return youtube.search(keyword);
   });
 
   return (
