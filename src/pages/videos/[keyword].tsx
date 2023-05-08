@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import React from "react";
-import FakeYoutube from "../api/youtube";
+import FakeYoutube from "../api/fakeYoutube";
+import Youtube from "../api/youtube";
 
 export default function Search() {
   const router = useRouter();
@@ -10,9 +11,9 @@ export default function Search() {
   const {
     isLoading,
     error,
-    data: videos,
-  } = useQuery(["videos", keyword], async () => {
-    const youtube = new FakeYoutube();
+    data: searchedVideos,
+  } = useQuery(["search", keyword], async () => {
+    const youtube = new Youtube();
     return youtube.search(keyword);
   });
 
@@ -22,10 +23,11 @@ export default function Search() {
       <br />
       <br />
       <div>
-        {videos?.map((item) => {
+        {searchedVideos?.map((item) => {
           return (
-            <div key={item.id.videoId}>
+            <div>
               <p>{item.snippet.channelTitle}</p>
+              {/* <p>{item.snippet.title}</p> */}
               <br />
             </div>
           );
