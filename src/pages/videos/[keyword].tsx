@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import FakeYoutube from "../api/fakeYoutube";
 import Youtube from "../api/youtube";
+import VideoCard from "@/components/Search/VideoCard";
 
 export default function Search() {
   const router = useRouter();
@@ -13,7 +14,7 @@ export default function Search() {
     error,
     data: searchedVideos,
   } = useQuery(["search", keyword], async () => {
-    const youtube = new Youtube();
+    const youtube = new FakeYoutube();
     return youtube.search(keyword);
   });
 
@@ -22,17 +23,7 @@ export default function Search() {
       <h1>{keyword}에 대한 검색결과 입니다.</h1>
       <br />
       <br />
-      <div>
-        {searchedVideos?.map((item) => {
-          return (
-            <div>
-              <p>{item.snippet.channelTitle}</p>
-              {/* <p>{item.snippet.title}</p> */}
-              <br />
-            </div>
-          );
-        })}
-      </div>
+      <VideoCard searchedVideos={searchedVideos} />
     </div>
   );
 }

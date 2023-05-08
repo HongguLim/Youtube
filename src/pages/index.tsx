@@ -10,10 +10,10 @@ export default function Home() {
     error,
     data: popularVideos,
   } = useQuery(["popular"], async () => {
-    const youtube = new Youtube();
+    const youtube = new FakeYoutube();
     return youtube.search();
   });
-  console.log(popularVideos);
+
   return (
     <div>
       {popularVideos?.map((item) => {
