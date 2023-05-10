@@ -18,12 +18,5 @@ export default function Search() {
     return youtube.search(keyword);
   });
 
-  return (
-    <div>
-      <h1>{keyword}에 대한 검색결과 입니다.</h1>
-      <br />
-      <br />
-      <VideoCard searchedVideos={searchedVideos} />
-    </div>
-  );
+  return <VideoCard searchedVideos={searchedVideos} keyword={keyword} />;
 }
