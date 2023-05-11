@@ -1,4 +1,5 @@
 import { formatAgo } from "@/util/date";
+import Link from "next/link";
 import React from "react";
 
 export default function VideoCard({ searchedVideos, popularVideos, keyword }) {
@@ -9,14 +10,17 @@ export default function VideoCard({ searchedVideos, popularVideos, keyword }) {
       {videos?.map((item) => {
         const { id, snippet } = item;
         const { title, thumbnails, channelTitle, publishedAt } = snippet;
+
         return (
           <li key={id}>
-            <img className="w-full" src={thumbnails.medium.url} alt={title} />
-            <div>
-              <p className="font-semibold my-2 line-clamp-2">{title}</p>
-              <p className="text-sm opacity-80">{channelTitle}</p>
-              <p className="text-sm opacity-80">{formatAgo(publishedAt)}</p>
-            </div>
+            <Link href={`/videos/watch/${id}`}>
+              <img className="w-full" src={thumbnails.medium.url} alt={title} />
+              <div>
+                <p className="font-semibold my-2 line-clamp-2">{title}</p>
+                <p className="text-sm opacity-80">{channelTitle}</p>
+                <p className="text-sm opacity-80">{formatAgo(publishedAt)}</p>
+              </div>
+            </Link>
           </li>
         );
       })}

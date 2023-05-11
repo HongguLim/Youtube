@@ -38,4 +38,15 @@ export default class Youtube {
       })
       .then((res) => res.data.items);
   }
+
+  async detailData(detailId) {
+    return this.httpClient
+      .get("videos", {
+        params: {
+          id: detailId,
+          part: "snippet",
+        },
+      })
+      .then((res) => res.data.items);
+  }
 }
