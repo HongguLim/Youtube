@@ -49,4 +49,16 @@ export default class Youtube {
       })
       .then((res) => res.data.items);
   }
+
+  async relatedVideo(detailId) {
+    return this.httpClient
+      .get("search", {
+        params: {
+          part: "snippet",
+          type: "video",
+          relatedToVideoId: detailId,
+        },
+      })
+      .then((res) => res.data.items);
+  }
 }

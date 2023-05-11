@@ -1,7 +1,7 @@
 import FakeYoutube from "@/pages/api/fakeYoutube";
 import Youtube from "@/pages/api/youtube";
 import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
+
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
@@ -18,7 +18,16 @@ export default function VideoDetail() {
     return youtube.detailData(detailId);
   });
 
-  if (isLoading) {
+  const {
+    isLoading: relatedIsLoading,
+    isError: relatedIsError,
+    data: relatedVideos,
+  } = useQuery(["related", detailId], async () => {
+    const youtube = new FakeYoutube();
+    return youtube.relatedVideo(detailId);
+  });
+
+  if (isLoading || relatedIsLoading) {
     return <div>Loading...</div>;
   }
 
@@ -32,18 +41,29 @@ export default function VideoDetail() {
         width="800"
         height="450"
         src={`
-        https://www.youtube.com/embed/${id}
-        `}
-        // ?autoplay=1&mute=1
-        frameborder="0"
+        https://www.youtube.com/embed/${id}`}
         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
       ></iframe>
       <div>
         <p>{localized.title}</p>
         <p>{channelTitle}</p>
         <p>{localized.description}</p>
       </div>
+      {relatedVideos && (
+        <div>
+          {relatedVideos.map((video) => (
+            <div key={video.id.videoId}>
+              <img
+                src={video.snippet.thumbnails.medium.url}
+                alt={video.snippet.title}
+                width={video.snippet.thumbnails.medium.width}
+                height={video.snippet.thumbnails.medium.height}
+              />
+              <p>{video.snippet.title}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
