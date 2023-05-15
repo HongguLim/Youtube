@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export default class Youtube {
+  // 클래스 생성자 함수
   constructor() {
     this.httpClient = axios.create({
       baseURL: "https://youtube.googleapis.com/youtube/v3",
@@ -14,17 +15,54 @@ export default class Youtube {
     return keyword ? this.#searchByKeyword(keyword) : this.#mostPopular();
   }
 
-  async #searchByKeyword(keyword) {
+  // async detailData(detailId) {
+  //   return this.httpClient
+  //     .get("videos", {
+  //       params: {
+  //         id: detailId,
+  //         part: "snippet",
+  //       },
+  //     })
+  //     .then((res) => res.data.items);
+  // }
+
+  async detailData(detailId) {
+    const videoData = await this.httpClient
+      .get("videos", {
+        params: {
+          id: detailId,
+          part: "snippet",
+        },
+      })
+      .then((res) => res.data.items);
+
+    const channelId = videoData[0].snippet.channelId;
+
+    const channelData = await this.httpClient
+      .get("channels", {
+        params: {
+          id: channelId,
+          part: "snippet",
+        },
+      })
+      .then((res) => res.data.items);
+
+    return {
+      videoData: videoData[0],
+      channelData: channelData[0],
+    };
+  }
+
+  async relatedVideo(detailId) {
     return this.httpClient
       .get("search", {
         params: {
           part: "snippet",
-          maxResults: 25,
-          q: keyword,
+          type: "video",
+          relatedToVideoId: detailId,
         },
       })
-      .then((res) => res.data.items)
-      .then((items) => items.map((item) => ({ ...item, id: item.id.videoId })));
+      .then((res) => res.data.items);
   }
 
   async #mostPopular() {
@@ -39,26 +77,16 @@ export default class Youtube {
       .then((res) => res.data.items);
   }
 
-  async detailData(detailId) {
-    return this.httpClient
-      .get("videos", {
-        params: {
-          id: detailId,
-          part: "snippet",
-        },
-      })
-      .then((res) => res.data.items);
-  }
-
-  async relatedVideo(detailId) {
+  async #searchByKeyword(keyword) {
     return this.httpClient
       .get("search", {
         params: {
           part: "snippet",
-          type: "video",
-          relatedToVideoId: detailId,
+          maxResults: 25,
+          q: keyword,
         },
       })
-      .then((res) => res.data.items);
+      .then((res) => res.data.items)
+      .then((items) => items.map((item) => ({ ...item, id: item.id.videoId })));
   }
 }

@@ -1,9 +1,11 @@
 import { formatAgo } from "@/util/date";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 
 export default function VideoCard({ searchedVideos, popularVideos, keyword }) {
   const videos = keyword ? searchedVideos : popularVideos;
+  const router = useRouter();
 
   return (
     <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 gap-y-4">

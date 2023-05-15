@@ -19,7 +19,7 @@ export default class FakeYoutube {
   }
 
   async detailData() {
-    return axios.get(`/videos/detail.json`).then((res) => res.data.items);
+    axios.get(`/videos/detail.json`).then((res) => res.data.items);
   }
 
   async relatedVideo() {

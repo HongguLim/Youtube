@@ -1,3 +1,5 @@
+import ChannelInfo from "@/components/Detail/ChannelInfo";
+import RelatedVideos from "@/components/Detail/RelatedVideos";
 import FakeYoutube from "@/pages/api/fakeYoutube";
 import Youtube from "@/pages/api/youtube";
 import { useQuery } from "@tanstack/react-query";
@@ -14,56 +16,43 @@ export default function VideoDetail() {
     isError,
     data: detailVideos,
   } = useQuery(["detail", detailId], async () => {
-    const youtube = new FakeYoutube();
+    const youtube = new Youtube();
     return youtube.detailData(detailId);
   });
 
-  const {
-    isLoading: relatedIsLoading,
-    isError: relatedIsError,
-    data: relatedVideos,
-  } = useQuery(["related", detailId], async () => {
-    const youtube = new FakeYoutube();
-    return youtube.relatedVideo(detailId);
-  });
+  const { id } = detailVideos.videoData;
+  const { channelId, channelTitle, localized } = detailVideos.videoData.snippet;
+  const { thumbnails } = detailVideos?.channelData.snippet;
 
-  if (isLoading || relatedIsLoading) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  console.log("data", detailVideos);
-  const { id } = detailVideos[0];
-  const { channelTitle, localized } = detailVideos[0].snippet;
-
   return (
-    <div>
-      <iframe
-        width="800"
-        height="450"
-        src={`
+    <section className="flex flex-col lg:flex-row">
+      <article className="basis-4/6">
+        <iframe
+          id="player"
+          type="text/html"
+          width="100%"
+          height="640"
+          src={`
         https://www.youtube.com/embed/${id}`}
-        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-      ></iframe>
-      <div>
-        <p>{localized.title}</p>
-        <p>{channelTitle}</p>
-        <p>{localized.description}</p>
-      </div>
-      {relatedVideos && (
-        <div>
-          {relatedVideos.map((video) => (
-            <div key={video.id.videoId}>
-              <img
-                src={video.snippet.thumbnails.medium.url}
-                alt={video.snippet.title}
-                width={video.snippet.thumbnails.medium.width}
-                height={video.snippet.thumbnails.medium.height}
-              />
-              <p>{video.snippet.title}</p>
-            </div>
-          ))}
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        />
+        <div className="p-8">
+          <h2 className="text-xl font-bold">{localized.title}</h2>
+          <ChannelInfo
+            id={channelId}
+            name={channelTitle}
+            thumbnails={thumbnails}
+          />
+          <pre className="whitespace-pre-wrap">{localized.description}</pre>
         </div>
-      )}
-    </div>
+      </article>
+      <div>
+        <RelatedVideos detailId={detailId} />
+      </div>
+    </section>
   );
 }
