@@ -1,6 +1,5 @@
 import ChannelInfo from "@/components/Detail/ChannelInfo";
 import RelatedVideos from "@/components/Detail/RelatedVideos";
-import FakeYoutube from "@/pages/api/fakeYoutube";
 import Youtube from "@/pages/api/youtube";
 import { useQuery } from "@tanstack/react-query";
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ChannelInfo({ name, thumbnails }) {
+export default function ChannelInfo({ name, thumbnails }: any) {
   return (
     <div className="flex my-4 mb-8 items-center">
       <img
