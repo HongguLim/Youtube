@@ -1,4 +1,3 @@
-import FakeYoutube from "@/pages/api/fakeYoutube";
 import { formatAgo } from "@/util/date";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
