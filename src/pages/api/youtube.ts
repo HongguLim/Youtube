@@ -15,17 +15,6 @@ export default class Youtube {
     return keyword ? this.#searchByKeyword(keyword) : this.#mostPopular();
   }
 
-  // async detailData(detailId) {
-  //   return this.httpClient
-  //     .get("videos", {
-  //       params: {
-  //         id: detailId,
-  //         part: "snippet",
-  //       },
-  //     })
-  //     .then((res) => res.data.items);
-  // }
-
   async detailData(detailId) {
     const videoData = await this.httpClient
       .get("videos", {
@@ -47,22 +36,22 @@ export default class Youtube {
       })
       .then((res) => res.data.items);
 
-    return {
-      videoData: videoData[0],
-      channelData: channelData[0],
-    };
-  }
-
-  async relatedVideo(detailId) {
-    return this.httpClient
+    const relatedVideo = await this.httpClient
       .get("search", {
         params: {
           part: "snippet",
+          maxResults: 10,
           type: "video",
           relatedToVideoId: detailId,
         },
       })
       .then((res) => res.data.items);
+
+    return {
+      videoData: videoData[0],
+      channelData: channelData[0],
+      relatedVideo: relatedVideo,
+    };
   }
 
   async #mostPopular() {
@@ -86,7 +75,6 @@ export default class Youtube {
           q: keyword,
         },
       })
-      .then((res) => res.data.items)
-      .then((items) => items.map((item) => ({ ...item, id: item.id.videoId })));
+      .then((res) => res.data.items);
   }
 }

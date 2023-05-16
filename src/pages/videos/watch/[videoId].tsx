@@ -5,7 +5,7 @@ import Youtube from "@/pages/api/youtube";
 import { useQuery } from "@tanstack/react-query";
 
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React from "react";
 
 export default function VideoDetail() {
   const router = useRouter();
@@ -15,18 +15,23 @@ export default function VideoDetail() {
     isLoading,
     isError,
     data: detailVideos,
-  } = useQuery(["detail", detailId], async () => {
-    const youtube = new Youtube();
-    return youtube.detailData(detailId);
-  });
-
-  const { id } = detailVideos.videoData;
-  const { channelId, channelTitle, localized } = detailVideos.videoData.snippet;
-  const { thumbnails } = detailVideos?.channelData.snippet;
+  } = useQuery(
+    ["detail", detailId],
+    async () => {
+      const youtube = new Youtube();
+      return youtube.detailData(detailId);
+    },
+    { staleTime: 1000 * 60 * 5 }
+  );
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
+  const { id } = detailVideos?.videoData;
+
+  const { channelId, channelTitle, localized } =
+    detailVideos?.videoData.snippet;
+  const { thumbnails } = detailVideos?.channelData.snippet;
 
   return (
     <section className="flex flex-col lg:flex-row">
@@ -50,9 +55,9 @@ export default function VideoDetail() {
           <pre className="whitespace-pre-wrap">{localized.description}</pre>
         </div>
       </article>
-      <div>
-        <RelatedVideos detailId={detailId} />
-      </div>
+      <section className="basis-2/6">
+        <RelatedVideos relatedVideo={detailVideos?.relatedVideo} />
+      </section>
     </section>
   );
 }

@@ -1,12 +1,11 @@
 # Youtube-Project
 
-### **유튜브 API를 가져와 Next.js로 구현해보는 프로젝트 입니다.**
+### **유튜브 API로 페이지를 구현해보는 프로젝트 입니다.**
 
 ## 🛠️ 주요기술 / 라이브러리
 
 - react
-- nextJS
-- typescript
+- next.js
 - react-query
 - axios
 - postman

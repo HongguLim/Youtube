@@ -10,10 +10,14 @@ export default function Home() {
     isLoading,
     error,
     data: popularVideos,
-  } = useQuery(["popular"], async () => {
-    const youtube = new FakeYoutube();
-    return youtube.search();
-  });
+  } = useQuery(
+    ["popular"],
+    async () => {
+      const youtube = new Youtube();
+      return youtube.search();
+    },
+    { staleTime: 1000 * 60 * 5 }
+  );
 
   return <VideoCard popularVideos={popularVideos} />;
 }

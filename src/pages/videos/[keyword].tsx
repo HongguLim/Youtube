@@ -13,10 +13,14 @@ export default function Search() {
     isLoading,
     error,
     data: searchedVideos,
-  } = useQuery(["search", keyword], async () => {
-    const youtube = new FakeYoutube();
-    return youtube.search(keyword);
-  });
+  } = useQuery(
+    ["search", keyword],
+    async () => {
+      const youtube = new Youtube();
+      return youtube.search(keyword);
+    },
+    { staleTime: 1000 * 60 * 5 }
+  );
 
   return <VideoCard searchedVideos={searchedVideos} keyword={keyword} />;
 }
