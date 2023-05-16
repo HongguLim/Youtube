@@ -2,11 +2,7 @@ import { formatAgo } from "@/util/date";
 import Link from "next/link";
 import React from "react";
 
-export default function VideoCard({
-  searchedVideos,
-  popularVideos,
-  keyword,
-}: any) {
+export default function VideoCard({ searchedVideos, popularVideos, keyword }) {
   const videos = keyword ? searchedVideos : popularVideos;
 
   return (

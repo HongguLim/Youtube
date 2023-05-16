@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import React from "react";
 
-export default function RelatedVideos({ relatedVideo }: any) {
+export default function RelatedVideos({ relatedVideo }) {
   return (
     <div>
       {relatedVideo &&
